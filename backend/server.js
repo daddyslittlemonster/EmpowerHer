@@ -4,13 +4,14 @@ const OpenAI = require('openai');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 10000;
 
 // Enable CORS for specific origins
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
-    // Add your frontend domain here, e.g.:
+    'http://localhost:10000',
+    // Add your frontend domain here once deployed
     // 'https://your-frontend-domain.com'
 ];
 
