@@ -11,6 +11,7 @@ const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:10000',
+    'https://empowerher-backend-o3kk.onrender.com',
     // Add your frontend domain here once deployed
     // 'https://your-frontend-domain.com'
 ];
