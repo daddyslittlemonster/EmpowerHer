@@ -1,34 +1,22 @@
 {
-  "name": "empowerher-frontend",
+  "name": "empowerher",
   "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
-  },
+  "description": "A financial education platform for women",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "concurrently \"cd packages/frontend && npm start\" \"cd packages/backend && node src/server.js\"",
+    "install-all": "npm install && cd packages/frontend && npm install && cd ../backend && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [
+    "finance",
+    "education",
+    "women",
+    "empowerment"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
-} 
+}
