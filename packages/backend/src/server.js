@@ -6,10 +6,23 @@ const OpenAI = require('openai');
 const app = express();
 const port = process.env.PORT || 3002;
 
+// Log environment variables (without exposing sensitive data)
+console.log('Environment variables loaded:');
+console.log('PORT:', process.env.PORT);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
+console.log('OPENAI_API_KEY exists:', !!process.env.OPENAI_API_KEY);
+
 // Initialize OpenAI
-const openai = new OpenAI({
+let openai;
+try {
+  openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
-});
+  });
+  console.log('OpenAI client initialized successfully');
+} catch (error) {
+  console.error('Error initializing OpenAI client:', error.message);
+}
 
 // Middleware
 app.use(cors({
@@ -21,12 +34,23 @@ app.use(express.json());
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'healthy' });
+    res.json({ 
+      status: 'healthy',
+      environment: process.env.NODE_ENV,
+      openaiInitialized: !!openai
+    });
 });
 
 // Chat endpoint
 app.post('/api/chat', async (req, res) => {
     try {
+        if (!openai) {
+            return res.status(500).json({ 
+                error: 'OpenAI client not initialized',
+                details: 'The OpenAI API key is missing or invalid'
+            });
+        }
+
         const { message } = req.body;
         
         if (!message) {
@@ -52,7 +76,7 @@ app.post('/api/chat', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error in chat endpoint:', error);
         
         if (error.response?.status === 401) {
             return res.status(401).json({ error: 'Invalid API key' });
@@ -67,7 +91,7 @@ app.post('/api/chat', async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Global error handler:', err.stack);
     res.status(500).json({ 
         error: 'Something broke!',
         details: process.env.NODE_ENV === 'development' ? err.message : undefined
